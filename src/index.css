@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.active {
+  background: red;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination li {
+  display: inline-block;
+  margin-right: 5px;
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.pagination li.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination li:hover {
+  background-color: #ccc;
+}
+
+.previous {
+  text-decoration: none;
+}
+.next {
+  text-decoration: none;
+}
+
+.button_style {
+  height: 20px;
+  background-color: palevioletred;
+  border: white;
+  border-radius: 500px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 115.69%;
+  text-align: center;
+  letter-spacing: 0.06em;
+  color: #f6f6f6;
+  cursor: pointer;
+  padding: 0px 10px;
+  margin-bottom: 25px;
+}
+
+.progress-bar2 > .progress-bar {
+  color: black !important;
+  background-color: palevioletred !important;
+}
+.progress-bar23 > .progress-bar {
+  color: black !important;
+  background-color: #a6ff33 !important;
+}
+.data_hassan {
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom_icon {
+  position: absolute;
+  bottom: 10px; /* Adjust the distance from the bottom */
+  right: 10px; /* Adjust the distance from the right */
+  font-size: 24px; /* Adjust the icon size */
+  color: #000; /* Adjust the icon color */
+  cursor: pointer;
+}
+
+.delete_icon {
+  color: red;
+  cursor: pointer;
+}
+
+.my_data > input[type="checkbox"] {
+  accent-color: yellow;
+}
+
+.custom-tooltip .tooltip-inner {
+  max-width: 400px; /* set your desired width */
+}
