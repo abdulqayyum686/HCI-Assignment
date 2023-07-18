@@ -664,19 +664,6 @@ function VersionOne() {
                     </>
                   );
                 })}
-
-                {/* {data.subTasks.length > 0 && (
-                <div className="lines">
-                  <div className="lineone"></div>
-                  <div className="linetwo"></div>
-                  <div className="linethree"></div>
-                  <div className="linefour"></div>
-                  <div className="linefive"></div>
-                  <div className="linesix"></div>
-                  <div className="lineseven"></div>
-                </div>
-              )} */}
-              
               </div>
             );
           })}
@@ -685,19 +672,6 @@ function VersionOne() {
           className="bottom_icon"
           onClick={handleShow}
         />
-      </div>
-      <div className="lines">
-
-
-        <div className="lineone"></div>
-        <div className="linetwo"></div>
-        <div className="linetwoinner"></div>
-        <div className="linethree"></div>
-
-        {/* <div className="linefour"></div>
-                  <div className="linefive"></div>
-                  <div className="linesix"></div>
-                  <div className="lineseven"></div> */}
       </div>
     </div>
   );
