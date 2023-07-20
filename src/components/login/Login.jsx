@@ -44,10 +44,10 @@ function Login() {
         dispatch(setCurrentUser(res?.data?.user));
         cookies.set("token", res?.data?.token);
         if (res?.data?.user.type === "user") {
-          successMessage("User login successfull");
+          successMessage("User login successful");
           navigate("/");
         } else {
-          successMessage("Admin login successfull");
+          successMessage("Admin login successful");
           navigate("/admin-users-list");
         }
       })

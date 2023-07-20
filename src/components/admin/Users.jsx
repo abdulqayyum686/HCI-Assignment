@@ -7,7 +7,7 @@ import ReactPaginate from "react-paginate";
 import Header from "../Header/Header";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
-var itemsPerPage = 10;
+var itemsPerPage = 30;
 const Users = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((s) => s.userReducer);

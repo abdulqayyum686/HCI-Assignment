@@ -10,7 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 
-var itemsPerPage = 10;
+var itemsPerPage = 30;
 const TaskList = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((s) => s.userReducer);

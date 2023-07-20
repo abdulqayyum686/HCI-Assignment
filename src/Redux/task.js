@@ -35,7 +35,7 @@ export const addTask = createAsyncThunk("addTask", async (postData) => {
   try {
     const res = await axiosInstance.post(`task/add-task`, postData);
     if (res.status === 201) {
-      successMessage("Task added successfully !");
+      successMessage("Goal added successfully !");
     }
     return res.data;
   } catch (err) {
@@ -50,7 +50,7 @@ export const addSubTask = createAsyncThunk("addSubTask", async (postData) => {
   try {
     const res = await axiosInstance.post(`task/add-sub-task`, postData);
     if (res.status === 201) {
-      successMessage("Sub-task added successfully!");
+      successMessage("Sub-goal added successfully!");
     }
     return res.data;
   } catch (err) {
@@ -66,7 +66,7 @@ export const deleteTask = createAsyncThunk("deleteTask", async (id) => {
   try {
     const res = await axiosInstance.delete(`task/delete-task/${id}`);
     if (res.status === 201) {
-      successMessage("Task added successfully !");
+      successMessage("Goal added successfully !");
     }
     return res.data;
   } catch (err) {
@@ -83,7 +83,7 @@ export const deleteSubTask = createAsyncThunk("deleteSubTask", async (obj) => {
       `task/delete-sub-task/${obj.id1}/${obj.id2}`
     );
     if (res.status === 201) {
-      successMessage("Task added successfully !");
+      successMessage("Goal added successfully !");
     }
     return res.data;
   } catch (err) {
@@ -104,7 +104,7 @@ export const updateTask = createAsyncThunk("updateTask", async (obj) => {
       inputData: obj.inputData,
     });
     if (res.status === 201 && obj.flag === true) {
-      successMessage("Task updated successfully !");
+      successMessage("Goal updated successfully !");
     }
     return res.data;
   } catch (err) {
@@ -126,7 +126,7 @@ export const updateSubTask = createAsyncThunk("updateSubTask", async (obj) => {
       }
     );
     if (res.status === 201) {
-      successMessage("Sub Task updated successfully !");
+      successMessage("Goal updated successfully !");
     }
     return res.data;
   } catch (err) {
@@ -149,7 +149,7 @@ export const updateSubTaskInputData = createAsyncThunk(
         }
       );
       if (res.status === 201) {
-        successMessage("Sub Task updated successfully !");
+        successMessage("Sub Goal updated successfully !");
       }
       return res.data;
     } catch (err) {

@@ -2,7 +2,7 @@ import React, { useState, version } from "react";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import "../login/login.css";
-import { userSignUp } from "../../Redux/user";
+import { userSignUp, setCurrentUser } from "../../Redux/user";
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "react-bootstrap/Dropdown";
 import axios from "axios";
@@ -37,6 +37,7 @@ function SignUp() {
 
     let res = await dispatch(userSignUp(user));
     if (res.payload) {
+      dispatch(setCurrentUser(res?.payload?.data?.user));
       axios.defaults.headers.authorization = res?.payload?.data?.token;
       axiosInstance.defaults.headers.authorization = res?.payload?.data?.token;
       cookies.set("token", res?.payload?.data?.token);

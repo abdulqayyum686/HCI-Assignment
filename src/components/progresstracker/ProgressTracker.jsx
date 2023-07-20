@@ -100,7 +100,7 @@ function ProgressTracker() {
       url: "/",
     },
     {
-      name: "Tasks",
+      name: "Goals",
       url: "/version1",
     },
   ];

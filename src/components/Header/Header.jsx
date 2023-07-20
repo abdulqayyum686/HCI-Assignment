@@ -62,7 +62,6 @@ const Header = ({
                       add your goals.
                     </div>
                     <div>
-                      {" "}
                       - After adding a goal, use the menu on the right to add
                       new sub-goal(s) or delete a goal.
                     </div>
@@ -83,10 +82,9 @@ const Header = ({
                       importance of a particular goal to you.
                     </div>
                     <div>
-                      {" "}
-                      - Use this checkbox to indicate that the goal progress is
-                      satisfactory. The goal is not 100% complete but, the
-                      progress is satisfactory for now.
+                      - Use the checkbox on the right of each goal to indicate
+                      that the task progress is satisfactory. The task is not
+                      100% complete but, the progress is satisfactory for now.
                     </div>
                   </div>
                 </Tooltip>
