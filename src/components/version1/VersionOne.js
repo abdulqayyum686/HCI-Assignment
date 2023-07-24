@@ -13,6 +13,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { errorMessage } from "../../utils/message";
 import {
   getAllUserTasks,
   addTask,
@@ -79,8 +80,19 @@ function VersionOne() {
   //     setID(false);
   //   }
   // }, [ID]);
-
   const addMainTask = async () => {
+    if (mainTask.taskName === "") {
+      errorMessage("Plesae add goal name");
+      return;
+    }
+    if (mainTask.taskType === "") {
+      errorMessage("Plesae add goal type");
+      return;
+    }
+    if (mainTask.completionDate === "") {
+      errorMessage("Plesae add goal completion date");
+      return;
+    }
     let res = await dispatch(
       addTask({
         ...mainTask,
@@ -91,12 +103,26 @@ function VersionOne() {
     );
     if (res.payload) {
       // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+      setMainTask({
+        taskName: "",
+        taskType: "Academic",
+        completionDate: "",
+        diff: "",
+        inputData: "",
+      });
       getData();
     }
     handleClose();
   };
-
   const addSubTask2 = async () => {
+    if (subTask.name === "") {
+      errorMessage("Plesae add sub-goal name");
+      return;
+    }
+    if (subTask.completionDate === "") {
+      errorMessage("Plesae add sub-goal completion date");
+      return;
+    }
     let res = await dispatch(
       addSubTask({
         taskId,
@@ -107,12 +133,53 @@ function VersionOne() {
       })
     );
     if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));\
+      setSubTask({
+        name: "",
+        status: false,
+        status2: false,
+        completionDate: "",
+        diff: "",
+      });
       getData();
     }
     setSubTask({ ...subTask, name: "" });
     handleCloseSubTask();
   };
+
+  // const addMainTask = async () => {
+  //   let res = await dispatch(
+  //     addTask({
+  //       ...mainTask,
+  //       version: userReducer.currentUser.version,
+  //       belongsTo: userReducer.currentUser._id,
+  //       completionDate: new Date(mainTask.completionDate),
+  //     })
+  //   );
+  //   if (res.payload) {
+  //     // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+  //     getData();
+  //   }
+  //   handleClose();
+  // };
+
+  // const addSubTask2 = async () => {
+  //   let res = await dispatch(
+  //     addSubTask({
+  //       taskId,
+  //       taskObject: {
+  //         ...subTask,
+  //         completionDate: new Date(subTask.completionDate),
+  //       },
+  //     })
+  //   );
+  //   if (res.payload) {
+  //     // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+  //     getData();
+  //   }
+  //   setSubTask({ ...subTask, name: "" });
+  //   handleCloseSubTask();
+  // };
 
   const deleteMaintask = async (task) => {
     Swal.fire({
