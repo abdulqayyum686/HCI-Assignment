@@ -18,6 +18,7 @@ import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 
 import Cookies from "universal-cookie";
+import UserActivity from "./components/admin/UserActivity";
 
 const cookies = new Cookies();
 
@@ -60,6 +61,7 @@ function App() {
         <Route element={<AdminRoutes />}>
           <Route path="/admin-users-list" element={<Users />} />
           <Route path="/admin-task-list" element={<TaskList />} />
+          <Route path="/admin-user-activity" element={<UserActivity />} />
         </Route>
       </Routes>
     </BrowserRouter>

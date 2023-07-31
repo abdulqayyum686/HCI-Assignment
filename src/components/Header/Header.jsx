@@ -17,6 +17,7 @@ const Header = ({
   setCurrentType,
   currentType,
   displayButtons,
+  type,
 }) => {
   const userReducer = useSelector((store) => store.userReducer);
   const dispatch = useDispatch();
@@ -108,7 +109,10 @@ const Header = ({
                 style={{
                   borderBottom:
                     userReducer?.active !== index ? "1px solid black" : "",
-                  borderRight: index === 0 ? "1px solid black" : "",
+                  borderRight:
+                    index === 0 || (index === 1 && type === "admin")
+                      ? "1px solid black"
+                      : "",
                 }}
                 key={index}
                 onClick={() => handelActive(index, data)}

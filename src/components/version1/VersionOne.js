@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { BsFilterRight } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { BsFillPlusSquareFill } from "react-icons/bs";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
@@ -13,7 +13,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { errorMessage } from "../../utils/message";
+import { errorMessage, successMessage } from "../../utils/message";
 import {
   getAllUserTasks,
   addTask,
@@ -47,6 +47,7 @@ function VersionOne() {
     name: "",
     status: false,
     status2: false,
+    isDeleted: false,
     // inputData: "",
     completionDate: "",
     diff: "",
@@ -93,6 +94,7 @@ function VersionOne() {
       errorMessage("Plesae add goal completion date");
       return;
     }
+
     let res = await dispatch(
       addTask({
         ...mainTask,
@@ -102,7 +104,10 @@ function VersionOne() {
       })
     );
     if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+      let array = [...tabelData];
+      array.push(res.payload.task);
+      // console.log("array===", res.payload.task);
+      setTabelData(array);
       setMainTask({
         taskName: "",
         taskType: "Academic",
@@ -110,7 +115,6 @@ function VersionOne() {
         diff: "",
         inputData: "",
       });
-      getData();
     }
     handleClose();
   };
@@ -147,41 +151,7 @@ function VersionOne() {
     handleCloseSubTask();
   };
 
-  // const addMainTask = async () => {
-  //   let res = await dispatch(
-  //     addTask({
-  //       ...mainTask,
-  //       version: userReducer.currentUser.version,
-  //       belongsTo: userReducer.currentUser._id,
-  //       completionDate: new Date(mainTask.completionDate),
-  //     })
-  //   );
-  //   if (res.payload) {
-  //     // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-  //     getData();
-  //   }
-  //   handleClose();
-  // };
-
-  // const addSubTask2 = async () => {
-  //   let res = await dispatch(
-  //     addSubTask({
-  //       taskId,
-  //       taskObject: {
-  //         ...subTask,
-  //         completionDate: new Date(subTask.completionDate),
-  //       },
-  //     })
-  //   );
-  //   if (res.payload) {
-  //     // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-  //     getData();
-  //   }
-  //   setSubTask({ ...subTask, name: "" });
-  //   handleCloseSubTask();
-  // };
-
-  const deleteMaintask = async (task) => {
+  const deleteMaintask = async (task, type) => {
     Swal.fire({
       title: "Are you sure?",
       text: "",
@@ -192,31 +162,63 @@ function VersionOne() {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        let res = await dispatch(deleteTask(task._id));
-        if (res.payload) {
-          // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-          getData();
+        if (type === "deleteMainTask") {
+          successMessage("Deleted with time");
         }
-      }
-    });
-  };
-  const delSubTask = async (task, subtask) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
+        let array = [...tabelData];
+        array = array.filter((t) => t._id != task._id);
+        console.log("array===", array);
+        setTabelData(array);
+        // let res = await dispatch(deleteTask(task._id));
         let res = await dispatch(
-          deleteSubTask({
-            id1: task._id,
-            id2: subtask._id,
+          updateTask({
+            id: task._id,
+            change: { ...task, isDeleted: true, type },
           })
         );
+      }
+    });
+  };
+  const delSubTask = async (task, subtask, index, ind, type) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        if (type === "deleteSubTask") {
+          successMessage("Deleted with time");
+        }
+        let array = [...tabelData];
+        let indexData = { ...array[index] };
+
+        let cloneSubTasks = [...array[index].subTasks];
+        cloneSubTasks[ind] = {
+          ...cloneSubTasks[ind],
+          isDeleted: true,
+        };
+
+        indexData.subTasks = cloneSubTasks;
+
+        array[index] = indexData;
+        setTabelData(array);
+        let res = await dispatch(
+          updateTask({
+            id: task._id,
+            change: { subTasks: cloneSubTasks, type },
+          })
+        );
+        // let res = await dispatch(
+        //   deleteSubTask({
+        //     id1: task._id,
+        //     id2: subtask._id,
+        //   })
+        // );
+
         if (res.payload) {
           // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
           getData();
@@ -224,33 +226,94 @@ function VersionOne() {
       }
     });
   };
-  const changeSubTaskStatus = async (task, subtask) => {
-    let res = await dispatch(
-      updateSubTask({
-        id1: task._id,
-        id2: subtask._id,
-        status: !subtask.status,
-        status2: subtask.status2,
-      })
-    );
-    if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-      getData();
+  const changeSubTaskStatus = async (task, subtask, index, ind) => {
+    let array = [...tabelData];
+    let indexData = { ...array[index] };
+
+    let cloneSubTasks = [...array[index].subTasks];
+    cloneSubTasks[ind] = {
+      ...cloneSubTasks[ind],
+      status: !subtask.status,
+    };
+
+    indexData.subTasks = cloneSubTasks;
+
+    array[index] = indexData;
+    setTabelData(array);
+
+    if (!subtask.status === true) {
+      let res = await dispatch(
+        updateSubTask({
+          id1: task._id,
+          id2: subtask._id,
+          status: !subtask.status,
+          status2: subtask.status2,
+          type: "checkSubTaskStatus1",
+        })
+      );
+      successMessage("Complete with time");
     }
+    if (!subtask.status === false) {
+      let res = await dispatch(
+        updateSubTask({
+          id1: task._id,
+          id2: subtask._id,
+          status: !subtask.status,
+          status2: subtask.status2,
+          type: "unCheckSubTaskStatus1",
+        })
+      );
+      successMessage("incomplete with time");
+    }
+
+    // if (res.payload) {
+    //   // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+    //   getData();
+    // }
   };
-  const changeSubTaskStatus2 = async (task, subtask) => {
-    let res = await dispatch(
-      updateSubTask({
-        id1: task._id,
-        id2: subtask._id,
-        status: subtask.status,
-        status2: !subtask.status2,
-      })
-    );
-    if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-      getData();
+  const changeSubTaskStatus2 = async (task, subtask, index, ind) => {
+    let array = [...tabelData];
+    let indexData = { ...array[index] };
+
+    let cloneSubTasks = [...array[index].subTasks];
+    cloneSubTasks[ind] = {
+      ...cloneSubTasks[ind],
+      status2: !subtask.status2,
+    };
+
+    indexData.subTasks = cloneSubTasks;
+
+    array[index] = indexData;
+    setTabelData(array);
+    if (!subtask.status2 === true) {
+      let res = await dispatch(
+        updateSubTask({
+          id1: task._id,
+          id2: subtask._id,
+          status: subtask.status,
+          status2: !subtask.status2,
+          type: "checkSubTaskStatus2",
+        })
+      );
+      successMessage("Complete with time");
     }
+    if (!subtask.status2 === false) {
+      let res = await dispatch(
+        updateSubTask({
+          id1: task._id,
+          id2: subtask._id,
+          status: subtask.status,
+          status2: !subtask.status2,
+          type: "unCheckSubTaskStatus2",
+        })
+      );
+      successMessage("incomplete with time");
+    }
+
+    // if (res.payload) {
+    //   // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
+    //   getData();
+    // }
   };
   const changeMainTaskInput = async (e, task) => {
     setTabelData((prevData) =>
@@ -268,10 +331,6 @@ function VersionOne() {
         flag: false,
       })
     );
-    if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-      getData();
-    }
   };
 
   const handelChange = (e) => {
@@ -291,7 +350,7 @@ function VersionOne() {
     setSubTask({
       ...subTask,
       [e.target.name]: e.target.value,
-      diff: daysDifference,
+      diff: daysDifference + 1,
     });
   };
   const handelChangeMainTaskDate = (e) => {
@@ -305,63 +364,115 @@ function VersionOne() {
     setMainTask({
       ...mainTask,
       [e.target.name]: e.target.value,
-      diff: daysDifference,
+      diff: daysDifference + 1,
     });
   };
 
   const calculateDif = (item) => {
-    const startDateTime = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-    const endDateTime = new Date(item.completionDate);
+    // let start = moment().add(1, "day");
+    let start = moment();
+    let end = moment(item.completionDate);
+    let duration = moment.duration(end.diff(start));
+    let days = Math.ceil(duration.asDays());
 
-    const timeDifference = endDateTime.getTime() - startDateTime.getTime();
-    // Calculate the difference in days
-    const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
     if (item.status) {
       return 100;
-    } else if (daysDifference != 0) {
-      let value = ((item.diff - daysDifference) / item.diff) * 100;
+    } else if (days != 0) {
+      let value = ((item.diff - days) / item.diff) * 100;
       return value;
     } else {
       return 100;
     }
   };
   const calculateDifSat = (data) => {
-    const startDateTime = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-    const endDateTime = new Date(data.completionDate);
+    // let start = moment().add(1, "day");
+    let start = moment();
+    let end = moment(data.completionDate);
+    let duration = moment.duration(end.diff(start));
+    let days = Math.ceil(duration.asDays());
 
-    const timeDifference = endDateTime.getTime() - startDateTime.getTime();
-    // Calculate the difference in days
-    const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    console.log("daysDifference", days, duration.asDays());
     if (data.status) {
       return 100;
-    } else if (daysDifference != 0) {
-      let value = ((data.diff - daysDifference) / data.diff) * 100;
+    } else if (days != 0) {
+      let value = ((data.diff - days) / data.diff) * 100;
+      console.log("value==", value);
       return value;
     } else {
       return 100;
     }
   };
 
-  const handelChecked = async (task) => {
+  const handelChecked = async (task, type) => {
     let status = task.status === true ? false : true;
     let status2 = task.status2;
-    let res = await dispatch(
-      updateTask({ id: task._id, status, status2, flag: true })
-    );
-    if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-      getData();
+    let array = [...tabelData];
+    let index = array.findIndex((t) => t._id === task._id);
+    let indexData = { ...array[index] };
+    indexData.status = status;
+    if (status) {
+      indexData.subTasks = indexData.subTasks.map((obj) => ({
+        ...obj,
+        status: true,
+      }));
+    }
+
+    array[index] = indexData;
+    setTabelData(array);
+    console.log("type", status);
+    if (status === true) {
+      let res = await dispatch(
+        updateTask({
+          id: task._id,
+          change: { status, status2, flag: true, type: "checkMainStatus1" },
+        })
+      );
+
+      successMessage("Complete with time");
+    }
+    if (status === false) {
+      successMessage("Incomplete with time");
+      let res = await dispatch(
+        updateTask({
+          id: task._id,
+          change: { status, status2, flag: true, type: "unCheckMainStatus1" },
+        })
+      );
     }
   };
   const handelCheckedSat = async (task) => {
     let status = task.status;
     let status2 = task.status2 === true ? false : true;
-    let res = await dispatch(
-      updateTask({ id: task._id, status, status2, flag: true })
-    );
-    if (res.payload) {
-      // dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-      getData();
+    let array = [...tabelData];
+    let index = array.findIndex((t) => t._id === task._id);
+    let indexData = { ...array[index] };
+    indexData.status2 = status2;
+    if (status2) {
+      indexData.subTasks = indexData.subTasks.map((obj) => ({
+        ...obj,
+        status2: true,
+      }));
+    }
+
+    array[index] = indexData;
+    setTabelData(array);
+    if (status2 === true) {
+      let res = await dispatch(
+        updateTask({
+          id: task._id,
+          change: { status, status2, flag: false, type: "checkMainStatus2" },
+        })
+      );
+      successMessage("Complete with time");
+    }
+    if (status2 === false) {
+      let res = await dispatch(
+        updateTask({
+          id: task._id,
+          change: { status, status2, flag: false, type: "unCheckMainStatus2" },
+        })
+      );
+      successMessage("Incomplete with time");
     }
   };
 
@@ -513,17 +624,25 @@ function VersionOne() {
         </Modal>
         {/* 1stcheck */}
         {/* {taskReducer?.allUserTaskList */}
+        {/* {taskReducer.allUserTaskList */}
         {tabelData
           ?.filter((t) => t.taskType === currentType)
           ?.map((data, index) => {
             return (
-              <div>
-                <div className="checkbox_Div" key={index}>
+              <div key={index}>
+                <div className="checkbox_Div">
                   <div className="checkBox_1" style={{ marginTop: "0px" }}>
                     <input
                       className=""
                       type="checkbox"
-                      onChange={(e) => handelChecked(data)}
+                      onChange={(e) =>
+                        handelChecked(
+                          data
+                          // data.status2 === true
+                          //   ? "checkMainStatus1"
+                          //   : "unCheckMainStatus1"
+                        )
+                      }
                       checked={data.status}
                     />
                   </div>
@@ -550,6 +669,7 @@ function VersionOne() {
                         width: "200px",
                       }}
                     />
+
                     <textarea
                       className="goal_para"
                       placeholder="What is the importance of this goal to you?"
@@ -562,7 +682,14 @@ function VersionOne() {
                     <input
                       className="checkbox_2"
                       type="checkbox"
-                      onChange={(e) => handelCheckedSat(data)}
+                      onChange={(e) =>
+                        handelCheckedSat(
+                          data
+                          // data.status2 === true
+                          //   ? "checkMainStatus2"
+                          //   : "unCheckMainStatus2"
+                        )
+                      }
                       checked={data.status2}
                     />
                     <p className="satis">
@@ -599,18 +726,20 @@ function VersionOne() {
                   <div>
                     <Dropdown drop="start">
                       <Dropdown.Toggle style={{ background: "none" }}>
-                        <BsFilterRight
+                        <GiHamburgerMenu
                           style={{
                             color: "#cc1a54",
                             cursor: "pointer",
-                            marginTop: "-6px",
+                            marginTop: "-20px",
                             // flex: 1,
                           }}
                           size={30}
                         />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => deleteMaintask(data)}>
+                        <Dropdown.Item
+                          onClick={() => deleteMaintask(data, "deleteMainTask")}
+                        >
                           Delete Main Goal
                         </Dropdown.Item>
                         <Dropdown.Divider />
@@ -631,7 +760,9 @@ function VersionOne() {
                             className="checkbox_1"
                             type="checkbox"
                             checked={item.status}
-                            onChange={() => changeSubTaskStatus(data, item)}
+                            onChange={() =>
+                              changeSubTaskStatus(data, item, index, ind)
+                            }
                           />
                         </div>
                         <div className="check2_text">
@@ -667,7 +798,9 @@ function VersionOne() {
                             className="checkbox_2"
                             type="checkbox"
                             checked={item.status2}
-                            onChange={() => changeSubTaskStatus2(data, item)}
+                            onChange={() =>
+                              changeSubTaskStatus2(data, item, index, ind)
+                            }
                           />
                           <p className="satis">
                             Satisfactory?{" "}
@@ -702,11 +835,11 @@ function VersionOne() {
                         <div>
                           <Dropdown drop="start">
                             <Dropdown.Toggle style={{ background: "none" }}>
-                              <BsFilterRight
+                              <GiHamburgerMenu
                                 style={{
                                   color: "#cc1a54",
                                   cursor: "pointer",
-                                  marginTop: "-6px",
+                                  marginTop: "-20px",
                                   // flex: 1,
                                 }}
                                 size={30}
@@ -714,7 +847,15 @@ function VersionOne() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                               <Dropdown.Item
-                                onClick={() => delSubTask(data, item)}
+                                onClick={() =>
+                                  delSubTask(
+                                    data,
+                                    item,
+                                    index,
+                                    ind,
+                                    "deleteSubTask"
+                                  )
+                                }
                               >
                                 Delete Sub Goal
                               </Dropdown.Item>

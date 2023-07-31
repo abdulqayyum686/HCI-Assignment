@@ -56,6 +56,7 @@ function ProgressTracker() {
   const respectiveType = (type) => {
     setCurrentType(type);
     if (type === "Today") {
+      // const currentDate = new Date(new Date().getTime() + 86400000);
       const currentDate = new Date();
       // Format the current date to match the "createdAt" format
       const currentDateString = currentDate.toISOString().split("T")[0];

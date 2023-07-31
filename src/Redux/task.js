@@ -29,23 +29,38 @@ export const getAllTasks = createAsyncThunk("getAllTasks", async () => {
     }
   } catch (err) {}
 });
+export const getAllActivity = createAsyncThunk("getAllActivity", async () => {
+  try {
+    const res = await axiosInstance.get(`task/get-all-activity`);
+    if (res.status === 201) {
+      return res.data.activity;
+    }
+  } catch (err) {}
+});
 
 // post requests
-export const addTask = createAsyncThunk("addTask", async (postData) => {
-  try {
-    const res = await axiosInstance.post(`task/add-task`, postData);
-    if (res.status === 201) {
-      successMessage("Goal added successfully !");
+export const addTask = createAsyncThunk(
+  "addTask",
+  async (postData, { getState }) => {
+    try {
+      const res = await axiosInstance.post(`task/add-task`, postData);
+      // let array = [...getState().taskReducer.allUserTaskList];
+      // console.log("array===1", array, res.data.task);
+      // array.push(res.data.task);
+      // console.log("array===", array, res.data);
+      if (res.status === 201) {
+        successMessage("Goal added successfully !");
+      }
+      return res.data;
+    } catch (err) {
+      errorMessage(
+        err.response.data.message
+          ? err.response.data.message
+          : err.response.data || err.message
+      );
     }
-    return res.data;
-  } catch (err) {
-    errorMessage(
-      err.response.data.message
-        ? err.response.data.message
-        : err.response.data || err.message
-    );
   }
-});
+);
 export const addSubTask = createAsyncThunk("addSubTask", async (postData) => {
   try {
     const res = await axiosInstance.post(`task/add-sub-task`, postData);
@@ -62,21 +77,28 @@ export const addSubTask = createAsyncThunk("addSubTask", async (postData) => {
   }
 });
 // delete requests
-export const deleteTask = createAsyncThunk("deleteTask", async (id) => {
-  try {
-    const res = await axiosInstance.delete(`task/delete-task/${id}`);
-    if (res.status === 201) {
-      successMessage("Goal added successfully !");
+export const deleteTask = createAsyncThunk(
+  "deleteTask",
+  async (id, { getState }) => {
+    try {
+      const res = await axiosInstance.delete(`task/delete-task/${id}`);
+      // let array = [...getState().taskReducer.allUserTaskList];
+      // console.log("array===1", array, res.data.task);
+      // array = array.filter((t) => t._id != id);
+      // console.log("array===", array);
+      if (res.status === 201) {
+        successMessage("Goal added successfully !");
+      }
+      return res.data;
+    } catch (err) {
+      errorMessage(
+        err.response.data.message
+          ? err.response.data.message
+          : err.response.data || err.message
+      );
     }
-    return res.data;
-  } catch (err) {
-    errorMessage(
-      err.response.data.message
-        ? err.response.data.message
-        : err.response.data || err.message
-    );
   }
-});
+);
 export const deleteSubTask = createAsyncThunk("deleteSubTask", async (obj) => {
   try {
     const res = await axiosInstance.delete(
@@ -95,26 +117,33 @@ export const deleteSubTask = createAsyncThunk("deleteSubTask", async (obj) => {
   }
 });
 // update requests
-export const updateTask = createAsyncThunk("updateTask", async (obj) => {
-  console.log(obj);
-  try {
-    const res = await axiosInstance.put(`task/update-task/${obj.id}`, {
-      status: obj.status,
-      status2: obj.status2,
-      inputData: obj.inputData,
-    });
-    if (res.status === 201 && obj.flag === true) {
-      successMessage("Goal updated successfully !");
+export const updateTask = createAsyncThunk(
+  "updateTask",
+  async (obj, { getState }) => {
+    try {
+      const res = await axiosInstance.put(`task/update-task/${obj.id}`, {
+        ...obj.change,
+      });
+
+      // let array = [...getState().taskReducer.allUserTaskList];
+      // let index = array.findIndex((t) => t._id === obj.id);
+      // let indexData = { ...array[index] };
+      // indexData.status = obj.status;
+      // array[index] = indexData;
+
+      if (res.status === 201 && obj.flag === true) {
+        successMessage("Goal updated successfully !");
+      }
+      return res.data;
+    } catch (err) {
+      errorMessage(
+        err.response.data.message
+          ? err.response.data.message
+          : err.response.data || err.message
+      );
     }
-    return res.data;
-  } catch (err) {
-    errorMessage(
-      err.response.data.message
-        ? err.response.data.message
-        : err.response.data || err.message
-    );
   }
-});
+);
 export const updateSubTask = createAsyncThunk("updateSubTask", async (obj) => {
   console.log(obj);
   try {
@@ -123,6 +152,7 @@ export const updateSubTask = createAsyncThunk("updateSubTask", async (obj) => {
       {
         status: obj.status,
         status2: obj.status2,
+        type: obj.type,
       }
     );
     if (res.status === 201) {
@@ -174,6 +204,7 @@ export const taskReducer = createSlice({
     [getAllUserTasks.fulfilled]: (state, action) => {
       state.allUserTaskList = action.payload;
     },
+
     [getAllTasks.fulfilled]: (state, action) => {
       state.taskList = action.payload;
     },
