@@ -46,7 +46,7 @@ const Header = ({
             Tutorial
             <OverlayTrigger
               placement="right"
-              delay={{ hide: 450, show: 300 }}
+              delay={{ hide: 450, show: 500 }}
               overlay={(props) => (
                 <Tooltip
                   {...props}
@@ -55,6 +55,60 @@ const Header = ({
                 >
                   <div className="text-start">
                     <div>
+                      Use this platform to keep track of your day-to-day goals.
+                    </div>
+                    <br />
+                    <div className="text_decoration">
+                      How can I add my goal(s)?
+                    </div>
+                    <div>
+                      • Use the
+                      <strong>'+' button</strong> at the bottom right of the
+                      screen to add your goals.
+                    </div>
+                    <div>
+                      • After adding a goal, use the menu on the right to
+                      <strong> add new sub-goal(s).</strong>
+                    </div>
+                    <div>
+                      • Pick a <strong>completion date</strong>
+                      for every goal or sub-goal.
+                    </div>
+                    <br />
+                    <div className="text_decoration">
+                      How can I update my goal(s)?
+                    </div>
+                    <div>
+                      • The
+                      <strong> progress bar </strong>
+                      on every goal indicates the completion percentage,
+                      starting from the day of addition of the goal.
+                    </div>
+                    <div>
+                      • Use the
+                      <strong> input box </strong>
+                      below every goal to describe the
+                      <strong> importance of a particular goal to you. </strong>
+                    </div>
+                    <div>
+                      • Use the
+                      <strong> checkbox on the right of each goal </strong>
+                      to indicate that the task progress is satisfactory.
+                      Satisfactory - The task is not 100% complete but, the
+                      progress is satisfactory for now.
+                    </div>
+                    <br />
+                    <div className="text_decoration">
+                      How can I track my goal(s)?
+                    </div>
+                    <div>
+                      • The
+                      <strong> Progress Tracker </strong>
+                      screen provides feedback on the number of goals/sub-goals
+                      completed and the number of goals/sub-goals remaining.
+                    </div>
+
+                    {/* <div>
                       - Use this platform to keep track of your day-to-day
                       goals.
                     </div>
@@ -86,7 +140,7 @@ const Header = ({
                       - Use the checkbox on the right of each goal to indicate
                       that the task progress is satisfactory. The task is not
                       100% complete but, the progress is satisfactory for now.
-                    </div>
+                    </div> */}
                   </div>
                 </Tooltip>
               )}

@@ -241,7 +241,7 @@ const TaskList = () => {
                   <th># Sub Tasks</th>
                   <th>Creation Date</th>
                   <th>Completion Date</th>
-                  <th>Action</th>
+                  {/* <th>Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -253,7 +253,7 @@ const TaskList = () => {
                       <td>{data.version}</td>
                       <td>{data.status ? "Complete" : "Incomplete"}</td>
                       <td>{data.status2 ? "Complete" : "Incomplete"}</td>
-                      <td>{data.belongsTo.email}</td>
+                      <td>{data?.belongsTo?.email}</td>
                       <td>
                         <button
                           className="button_style"
@@ -283,7 +283,7 @@ const TaskList = () => {
                       <td style={{ minWidth: "100px" }}>
                         {moment(data.completionDate).format("YYYY-MM-DD")}
                       </td>
-                      <td className="text-center">
+                      {/* <td className="text-center">
                         <MdDelete
                           onClick={() => deleteMainRow(data)}
                           className="delete_icon"
@@ -292,7 +292,7 @@ const TaskList = () => {
                           onClick={() => handleShow3(data)}
                           className="delete_icon ms-2"
                         />
-                      </td>
+                      </td> */}
                     </tr>
                   );
                 })}

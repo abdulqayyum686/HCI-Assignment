@@ -87,7 +87,11 @@ const Users = () => {
       if (result.isConfirmed) {
         let res = await dispatch(deleteUser(task._id));
         if (res.payload) {
-          getData();
+          let array = [...users];
+          array = array.filter((t) => t._id != task._id);
+          console.log("array===", array);
+          setUsers(array);
+          // getData();
         }
       }
     });
@@ -101,16 +105,18 @@ const Users = () => {
   };
   const returnTaskCount = (data, flag) => {
     let count = tasks?.filter(
-      (t) => t?.belongsTo._id === data?._id && t.status === flag
+      (t) => t?.belongsTo?._id === data?._id && t.status === flag
     )?.length;
     // console.log("count===", count);
     return count;
   };
   const returnSubTaskCount = (data, flag) => {
     let count = tasks
-      .filter((task) => task.belongsTo._id === data._id)
+      .filter((task) => task?.belongsTo?._id === data._id)
       ?.flatMap((task) =>
-        task.subTasks.filter((subTask) => subTask.status === flag)
+        task.subTasks.filter(
+          (subTask) => subTask.status === flag && subTask.isDeleted != true
+        )
       )?.length;
     console.log("count===", count);
     return count;
@@ -142,7 +148,7 @@ const Users = () => {
                   <th>Email</th>
                   <th>Version</th>
                   <th>Login Count</th>
-                  <th># Tasks</th>
+                  <th># Tasks completed</th>
                   <th># Remaning tasks</th>
                   <th># sub-tasks completed</th>
                   <th># Remaning sub-tasks</th>
@@ -167,10 +173,10 @@ const Users = () => {
 
                         {/* {data.subTasks.length} */}
                       </td>
-                      <td>{returnTaskCount(data, false)}</td>
                       <td>{returnTaskCount(data, true)}</td>
-                      <td>{returnSubTaskCount(data, false)}</td>
+                      <td>{returnTaskCount(data, false)}</td>
                       <td>{returnSubTaskCount(data, true)}</td>
+                      <td>{returnSubTaskCount(data, false)}</td>
 
                       <td>{moment(data.createdAt).format("YYYY-MM-DD")}</td>
                       <td className="text-center">

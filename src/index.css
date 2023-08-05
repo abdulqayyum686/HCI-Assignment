@@ -99,4 +99,9 @@ code {
 
 .custom-tooltip .tooltip-inner {
   max-width: 400px; /* set your desired width */
+  color: white;
+  background: #000;
+}
+.text_decoration {
+  text-decoration: underline;
 }
