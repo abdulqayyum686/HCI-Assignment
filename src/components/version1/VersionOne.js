@@ -104,7 +104,7 @@ function VersionOne() {
   const getData = async () => {
     if (userReducer?.currentUser) {
       let res = await dispatch(getAllUserTasks(userReducer?.currentUser?._id));
-      setTabelData(res.payload.filter((t) => t.taskType === currentType));
+      setTabelData(res?.payload?.filter((t) => t.taskType === currentType));
       setTabelData2(res.payload);
     }
   };

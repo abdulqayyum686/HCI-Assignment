@@ -58,7 +58,7 @@ const UserActivity = () => {
       // let res = await dispatch(getAllUsers(userReducer?.currentUser?._id));
       let res2 = await dispatch(getAllActivity());
       // let array = _.orderBy(res2.payload, ["_id", "belongsTo.email", "type2"]);
-      setUserActivity(res2.payload.filter((t) => t.version === "1"));
+      setUserActivity(res2?.payload?.filter((t) => t.version === "1"));
       setUserActivity2(res2.payload);
     }
   };
