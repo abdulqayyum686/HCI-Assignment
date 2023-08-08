@@ -6,7 +6,8 @@ axios.defaults.headers.authorization = cookies.get("reflink");
 
 const axiosInstance = axios.create({
   // baseURL: `http://localhost:6002/`,
-  baseURL: `https://erin-faithful-crayfish.cyclic.app/`,
+  // baseURL: `https://erin-faithful-crayfish.cyclic.app/`,
+  baseURL: `https://research-goalsetting-eta.me/api/`,
   headers: {
     "Content-Security-Policy":
       "default-src 'self'; script-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self';frame-ancestors 'none';",
