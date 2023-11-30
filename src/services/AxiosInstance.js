@@ -5,9 +5,8 @@ const cookies = new Cookies();
 axios.defaults.headers.authorization = cookies.get("reflink");
 
 const axiosInstance = axios.create({
-  // baseURL: `http://localhost:6002/`,
-  // baseURL: `https://erin-faithful-crayfish.cyclic.app/`,
-  baseURL: `https://research-goalsetting-eta.me/api/`,
+  baseURL: `http://localhost:6002/`,
+  // timeout: 5000,
   headers: {
     "Content-Security-Policy":
       "default-src 'self'; script-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self';frame-ancestors 'none';",
@@ -21,7 +20,7 @@ const axiosInstance = axios.create({
   "Access-Control-Allow-Methods": "*",
   "Access-Control-Allow-Headers":
     "Origin, X-Requested-With, Content-Type, Accept",
-  crossorigin: true,
+  crossorigin: false,
 });
 
 export default axiosInstance;

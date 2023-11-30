@@ -1,0 +1,57 @@
+.reviewer_panel_main_2 {
+  background: rgb(184, 214, 184);
+  height: 100vh;
+  display: flex;
+}
+.reviewer_panel_wrapper_2 {
+  padding-right: 5px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.reviewer_panel_leftbox_2 {
+  width: 70%;
+  background: white;
+  border-radius: 5px;
+}
+.reviewer_panel_rightbox_2 {
+  height: 100%;
+  width: 30%;
+  background-color: rgb(255, 255, 255);
+}
+.style_heading {
+  padding-top: 10px;
+  padding-left: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.style_text {
+  padding-left: 10px;
+  font-size: 14px;
+  font-style: italic;
+}
+.style_wrapper {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+.text_area {
+  width: 98%;
+}
+.bottom_wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px;
+}
+.button_style {
+  background-color: aqua;
+  border: none;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: black;
+  cursor: pointer;
+  padding: 8px 10px;
+}
